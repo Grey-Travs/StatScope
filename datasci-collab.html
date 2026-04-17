@@ -795,7 +795,20 @@ function renderTable(data) {
 // Reads the filter/sort controls, applies them to a COPY of window.DS,
 // and re-renders. Never mutates window.DS.
 function applyFilterSort() {
-  //TODO: implement applyFilterSort() to read the filter input and sort selection, create a filtered/sorted copy of window.DS, and call renderTable() with the new array. For next push
+  const query   = document.getElementById('filterInput').value.toLowerCase();
+  const sortKey = document.getElementById('sortSelect').value;
+
+  let result = window.DS.filter(row => row.name.toLowerCase().includes(query));
+
+  if (sortKey) {
+    result.sort((a, b) => {
+      if (sortKey === 'name') return a.name.localeCompare(b.name);
+      return b[sortKey] - a[sortKey];
+    });
+  }
+
+  renderTable(result);
+  document.getElementById('rowCount').textContent = result.length + ' rows';
 }
 
 // ── TASK 4: resetTable() ──────────────────────────────────
