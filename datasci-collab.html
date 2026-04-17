@@ -771,7 +771,23 @@ function loadDataset() {
 // ── TASK 2: renderTable(data) ─────────────────────────────
 // Dynamically builds every <tr> and injects it into #tableBody.
 function renderTable(data) {
-//TODO: implement renderTable(data) to loop through the provided data array and build table rows. For next push
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  data.forEach((row, i) => {
+    const tr = `<tr>
+      <td>${i + 1}</td>
+      <td>${row.name}</td>
+      <td class="numeric">${row.studyHours}</td>
+      <td class="numeric">${row.attendance}</td>
+      <td class="numeric">${row.midterm}</td>
+      <td class="numeric">${row.score}</td>
+      <td class="numeric">${row.assignments}</td>
+      <td class="numeric">${row.sleep}</td>
+      <td>${row.job ? 'Yes' : 'No'}</td>
+      <td class="grade-${row.grade}">${row.grade}</td>
+    </tr>`;
+    tbody.insertAdjacentHTML('beforeend', tr);
+  });
 }
 
 
