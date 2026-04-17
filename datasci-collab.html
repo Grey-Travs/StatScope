@@ -814,7 +814,10 @@ function applyFilterSort() {
 // ── TASK 4: resetTable() ──────────────────────────────────
 // Clears the toolbar and restores the full dataset view.
 function resetTable() {
-  //TODO: implement resetTable() to clear the filter input and sort selection, then call renderTable() with the original window.DS. For next push
+  document.getElementById('filterInput').value = '';
+  document.getElementById('sortSelect').value  = '';
+  renderTable(window.DS);
+  document.getElementById('rowCount').textContent = window.DS.length + ' rows';
 }
 
 </script>
