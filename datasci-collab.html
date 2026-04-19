@@ -716,7 +716,7 @@ window.CHARTS = {};
  */
 function onDataReady() {
   // Student 2: uncomment when initCharts() is implemented
-  // initCharts();
+  initCharts();
 
   // Student 3: uncomment when renderStats() is implemented
   // renderStats(window.DS);
@@ -820,6 +820,192 @@ function resetTable() {
   document.getElementById('rowCount').textContent = window.DS.length + ' rows';
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   STUDENT 2 — VISUALIZATION LAYER
+   Branch: feature/visualization
+═══════════════════════════════════════════════════════════ */
+
+function initCharts() {
+  if (window.CHARTS['barChart'])     window.CHARTS['barChart'].destroy();
+  if (window.CHARTS['scatterChart']) window.CHARTS['scatterChart'].destroy();
+  if (window.CHARTS['histChart'])    window.CHARTS['histChart'].destroy();
+  if (window.CHARTS['pieChart'])     window.CHARTS['pieChart'].destroy();
+
+  drawBarChart('barChart', window.DS);
+  drawScatterPlot('scatterChart', window.DS);
+  drawHistogram('histChart', window.DS);
+  drawPieChart('pieChart', window.DS);
+}
+
+function drawBarChart(canvasId, data) {
+  const sorted = [...data].sort((a, b) => a.studyHours - b.studyHours);
+  const labels = sorted.map(d => d.name.split(' ')[0]);
+  const scores = sorted.map(d => d.score);
+
+  document.getElementById('barChartPlaceholder').style.display = 'none';
+  document.getElementById(canvasId).style.display = 'block';
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  window.CHARTS[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Final Score',
+        data: scores,
+        backgroundColor: 'rgba(240,180,41,0.8)',
+        borderColor: '#f0b429',
+        borderWidth: 1,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        tooltip: { backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1, titleColor: '#f0b429', bodyColor: '#c8d4ee' }
+      },
+      scales: {
+        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } },
+        y: { min: 0, max: 100, ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } }
+      }
+    }
+  });
+}
+
+function drawScatterPlot(canvasId, data) {
+  const points = data.map(d => ({ x: d.attendance, y: d.score, name: d.name }));
+
+  document.getElementById('scatterChartPlaceholder').style.display = 'none';
+  document.getElementById(canvasId).style.display = 'block';
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  window.CHARTS[canvasId] = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Student',
+        data: points,
+        backgroundColor: 'rgba(62,207,207,0.7)',
+        borderColor: '#3ecfcf',
+        pointRadius: 6,
+        pointHoverRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        tooltip: {
+          backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
+          titleColor: '#3ecfcf', bodyColor: '#c8d4ee',
+          callbacks: {
+            label: ctx => ` ${ctx.raw.name} — Attendance: ${ctx.raw.x}%, Score: ${ctx.raw.y}`
+          }
+        }
+      },
+      scales: {
+        x: { min: 50, max: 100, ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
+             title: { display: true, text: 'Attendance %', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } },
+        y: { min: 40, max: 100, ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
+             title: { display: true, text: 'Final Score', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
+      }
+    }
+  });
+}
+
+function drawHistogram(canvasId, data) {
+  const bins   = [40, 50, 60, 70, 80, 90, 100];
+  const labels = ['40s', '50s', '60s', '70s', '80s', '90s+'];
+  const counts = new Array(6).fill(0);
+
+  data.forEach(d => {
+    for (let i = 0; i < bins.length - 1; i++) {
+      if (d.score >= bins[i] && d.score < bins[i + 1]) { counts[i]++; break; }
+      if (i === bins.length - 2 && d.score === 100) counts[i]++;
+    }
+  });
+
+  document.getElementById('histChartPlaceholder').style.display = 'none';
+  document.getElementById(canvasId).style.display = 'block';
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  window.CHARTS[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Students',
+        data: counts,
+        backgroundColor: 'rgba(224,92,106,0.75)',
+        borderColor: '#e05c6a',
+        borderWidth: 1,
+        barPercentage: 1.0,
+        categoryPercentage: 1.0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        tooltip: { backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1, titleColor: '#e05c6a', bodyColor: '#c8d4ee' }
+      },
+      scales: {
+        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } },
+        y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, stepSize: 1 }, grid: { color: '#1e2738' },
+             title: { display: true, text: 'Count', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
+      }
+    }
+  });
+}
+
+function drawPieChart(canvasId, data) {
+  const gradeCounts = { A: 0, B: 0, C: 0, D: 0 };
+  data.forEach(d => { if (gradeCounts[d.grade] !== undefined) gradeCounts[d.grade]++; });
+
+  const labels = ['A', 'B', 'C', 'D'];
+  const counts = labels.map(g => gradeCounts[g]);
+  const total  = counts.reduce((s, v) => s + v, 0);
+
+  document.getElementById('pieChartPlaceholder').style.display = 'none';
+  document.getElementById(canvasId).style.display = 'block';
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  window.CHARTS[canvasId] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data: counts,
+        backgroundColor: ['#56d364', '#f0b429', '#3ecfcf', '#e05c6a'],
+        borderColor: '#0f1319',
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: {
+        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        tooltip: {
+          backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
+          titleColor: '#3ecfcf', bodyColor: '#c8d4ee',
+          callbacks: {
+            label: ctx => {
+              const pct = ((ctx.parsed / total) * 100).toFixed(1);
+              return ` Grade ${ctx.label}: ${ctx.parsed} students (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
 </script>
 </body>
 </html>
