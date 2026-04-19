@@ -876,6 +876,7 @@ function drawBarChart(canvasId, data) {
 }
 
 function drawScatterPlot(canvasId, data) {
+  // scatter plot: attendance % vs final score per student
   const points = data.map(d => ({ x: d.attendance, y: d.score, name: d.name }));
 
   document.getElementById('scatterChartPlaceholder').style.display = 'none';
