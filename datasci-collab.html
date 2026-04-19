@@ -966,6 +966,7 @@ function drawHistogram(canvasId, data) {
 }
 
 function drawPieChart(canvasId, data) {
+  // pie chart implementation
   const gradeCounts = { A: 0, B: 0, C: 0, D: 0 };
   data.forEach(d => { if (gradeCounts[d.grade] !== undefined) gradeCounts[d.grade]++; });
 
