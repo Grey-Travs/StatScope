@@ -4,7 +4,7 @@ Collaborative data science dashboard for CS Git Collaborative Activity.
 
 ## Team
 - **Student 1 (Repo Owner):** Travis Lloyd B. Penalosa — Dataset & Table Engine (`feature/data-engine`)
-- **Student 2:**  — Data Visualization (`feature/visualization`)
+- **Student 2:** Gray Allen Arizala — Data Visualization (`feature/visualization`)
 - **Student 3:** [Teammate Name] — Statistics Engine (`feature/statistics`)
 
 ## Branch Protection
