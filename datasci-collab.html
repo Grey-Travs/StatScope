@@ -35,15 +35,87 @@
       --radius-lg: 14px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
-    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; opacity: 0.3; pointer-events: none; z-index: 0; }
 
-    header { position: relative; z-index: 1; padding: 48px 40px 32px; border-bottom: 1px solid var(--border-bright); }
-    header .eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; display: inline-block; padding: 6px 14px; border: 1px solid var(--border-bright); border-radius: 20px; }
-    header h1 { font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 10px; background: linear-gradient(135deg, #fff 0%, var(--text) 60%, var(--text-mid) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    header .subtitle { font-family: var(--mono); font-size: 0.85rem; color: var(--text-mid); max-width: 620px; }
-    header .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
-    .badge { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; border: 1px solid; display: inline-flex; align-items: center; gap: 8px; }
+    html, body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 48px 40px 32px;
+      border-bottom: 1px solid var(--border-bright);
+    }
+
+    header .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--border-bright);
+      border-radius: 20px;
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #fff 0%, var(--text) 60%, var(--text-mid) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header .subtitle {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      max-width: 620px;
+    }
+
+    header .badges {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
     .badge .dot { width: 7px; height: 7px; border-radius: 50%; }
     .badge.s1 { color: var(--s1); background: var(--s1-dim); border-color: rgba(245,166,35,0.3); }
     .badge.s1 .dot { background: var(--s1); }
@@ -196,57 +268,62 @@
   </div>
 
 
-  <!-- SECTION 2 · STATS (Student 3) -->
-  <div class="section-title">
-    <span class="tag s3">S3</span>
-    <h2>Statistical Analysis</h2>
-    <span class="hint">Computed from Jobs Cut</span>
-  </div>
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2 · STATISTICS ENGINE  (Student 3)
+  ═══════════════════════════════════════════════ -->
+  
+<div class="section-title">
+  <span class="tag s3">S3</span>
+  <h2>Statistical Analysis</h2>
+  <span class="hint">Computed from AI Investment ($B)</span>
+</div>
 
-  <div class="stat-grid">
-    <div class="stat-card">
-      <div class="label">Mean Jobs Cut</div>
-      <div class="value pending" id="statMean">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Median Jobs Cut</div>
-      <div class="value pending" id="statMedian">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Std. Dev.</div>
-      <div class="value pending" id="statStdDev">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Most Affected Sector</div>
-      <div class="value pending" id="statMode">—</div>
-    </div>
+<!-- Summary stat cards -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="label">Mean</div>
+    <div class="value" id="statMean">58.78</div>
   </div>
-
-  <div class="desc-strip">
-    <div class="desc-item"><div class="label">Companies</div><div class="value" id="dCount">—</div></div>
-    <div class="desc-item"><div class="label">Min Cut</div><div class="value" id="dMin">—</div></div>
-    <div class="desc-item"><div class="label">Max Cut</div><div class="value" id="dMax">—</div></div>
-    <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">—</div></div>
-    <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">—</div></div>
-    <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">—</div></div>
-    <div class="desc-item"><div class="label">Total Jobs</div><div class="value" id="dTotalJobs">—</div></div>
-    <div class="desc-item"><div class="label">AI Cited %</div><div class="value" id="dAiCitedPct">—</div></div>
+  <div class="stat-card">
+    <div class="label">Median</div>
+    <div class="value" id="statMedian">57.50</div>
   </div>
-
-  <div class="regression">
-    <div class="section-title" style="margin: 0 0 16px;">
-      <span class="tag s3">REG</span>
-      <h2 style="font-size:1.05rem;">Linear Regression · AI Investment ($B) → Jobs Cut</h2>
-    </div>
-    <div class="reg-grid">
-      <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">—</div></div>
-      <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">—</div></div>
-      <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">—</div></div>
-    </div>
-    <div class="reg-equation" id="rEquation">jobsCut = m · aiInvestBn + b</div>
-    <div class="reg-interp" id="rInterp">— correlation —</div>
+  <div class="stat-card">
+    <div class="label">Std. Dev.</div>
+    <div class="value" id="statStdDev">23.72</div>
   </div>
+  <div class="stat-card">
+    <div class="label">Mode</div>
+    <div class="value" id="statMode">None</div>
+  </div>
+</div>
 
+<!-- Descriptive strip -->
+<div class="desc-strip">
+  <div class="desc-item"><div class="label">Count</div><div class="value" id="dCount">20</div></div>
+  <div class="desc-item"><div class="label">Min</div><div class="value" id="dMin">22</div></div>
+  <div class="desc-item"><div class="label">Max</div><div class="value" id="dMax">110</div></div>
+  <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">88</div></div>
+  <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">562.38</div></div>
+  <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">23.72</div></div>
+</div>
+
+<!-- Regression panel -->
+<div class="regression">
+  <div class="section-title" style="margin: 0 0 16px;">
+    <span class="tag s3">REG</span>
+    <h2 style="font-size:1.05rem;">Linear Regression · AI Investment ($B) → Jobs Cut</h2>
+  </div>
+  <div class="reg-grid">
+    <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">105.104</div></div>
+    <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">2135.653</div></div>
+    <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">0.3113</div></div>
+  </div>
+  <div class="reg-equation" id="rEquation">jobsCut = 105.1037 · aiInvestBn + 2135.6532</div>
+  <div class="reg-interp" id="rInterp">
+    Moderate Positive Correlation (r = 0.5579)
+  </div>
+</div>
 
   <!-- SECTION 3 · CHARTS (Student 2) -->
   <div class="section-title">
