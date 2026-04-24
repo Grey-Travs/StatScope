@@ -389,6 +389,17 @@ const RAW_DATA = [
   { company: "Algoma Steel (Effective)", layoffDate: "2026-03-23", jobsCut: 1000, pctWorkforceCut: 20.0, sector: "Manufacturing", country: "Canada", hqCity: "Sault Ste Marie", aiCited: false, reasonStated: "Blast furnace closure effective", revenueBn: 2.8, preHeadcount: 5000, stockChangePct: -1.5, aiInvestBn: 0.0, rolesAffected: "Steel workers", replacementRoles: "None announced", ceoQuote: "Effective layoff date per filing", layoffs2024: 0, layoffs2025: 0, source: "Intellizence", month: "March 2026", quarter: "Q1 2026", region: "North America", sizeCategory: "Medium (500-2K)", stockReaction: "Negative", laidOffVsHeadcountPct: 20.0 }
 ];
 
+function sizeShort(cat) {
+  if (cat.startsWith('Mega'))   return { short: 'Mega',   cls: 'size-Mega'   };
+  if (cat.startsWith('Large'))  return { short: 'Large',  cls: 'size-Large'  };
+  if (cat.startsWith('Medium')) return { short: 'Medium', cls: 'size-Medium' };
+  return                             { short: 'Small',  cls: 'size-Small'  };
+}
+function stockClass(reaction) {
+  if (reaction === 'Positive') return 'stock-pos';
+  if (reaction === 'Negative') return 'stock-neg';
+  return 'stock-neu';
+}
 // ── TASK 1: loadDataset() ─────────────────────────────────
 // Boots the app: copies RAW_DATA to window.DS, renders the table,
 // updates the row counter, and fires onDataReady() as the LAST line.
@@ -405,17 +416,25 @@ function renderTable(data) {
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
   data.forEach((row, i) => {
+    const sz = sizeShort(row.sizeCategory);
+    const stkCls = stockClass(row.stockReaction);
+    const aiPill = row.aiCited
+      ? '<span class="ai-pill yes">AI</span>'
+      : '<span class="ai-pill no">—</span>';
+    const stockDisplay = (row.stockChangePct > 0 ? '+' : '') + row.stockChangePct.toFixed(1) + '%';
+
     const tr = `<tr>
       <td>${i + 1}</td>
-      <td>${row.name}</td>
-      <td class="numeric">${row.studyHours}</td>
-      <td class="numeric">${row.attendance}</td>
-      <td class="numeric">${row.midterm}</td>
-      <td class="numeric">${row.score}</td>
-      <td class="numeric">${row.assignments}</td>
-      <td class="numeric">${row.sleep}</td>
-      <td>${row.job ? 'Yes' : 'No'}</td>
-      <td class="grade-${row.grade}">${row.grade}</td>
+      <td>${row.company}</td>
+      <td>${row.layoffDate}</td>
+      <td class="numeric">${row.jobsCut.toLocaleString()}</td>
+      <td class="numeric">${row.pctWorkforceCut}%</td>
+      <td>${row.sector}</td>
+      <td>${row.region}</td>
+      <td>${aiPill}</td>
+      <td class="numeric ${stkCls}">${stockDisplay}</td>
+      <td class="numeric">${row.aiInvestBn}</td>
+      <td class="${sz.cls}">${sz.short}</td>
     </tr>`;
     tbody.insertAdjacentHTML('beforeend', tr);
   });
