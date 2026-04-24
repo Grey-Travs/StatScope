@@ -4,198 +4,200 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tech Layoffs 2026 Tracker — DataSci Collab</title>
-
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
-
+ 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
+ 
   <style>
     :root {
-      --bg: #080b10;
-      --surface: #0f1319;
-      --surface2: #161c27;
-      --border: #1e2738;
-      --border-bright: #2e3d58;
-      --s1: #f5a623;
-      --s2: #3ecfcf;
-      --s3: #e05c6a;
-      --s1-dim: rgba(245,166,35,0.12);
-      --s2-dim: rgba(62,207,207,0.12);
-      --s3-dim: rgba(224,92,106,0.12);
-      --text: #c8d4ee;
-      --text-dim: #5a6882;
-      --text-mid: #8a97b8;
-      --green: #56d364;
-      --amber: #f0b429;
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --surface2: #f0f2f7;
+      --border: #e6e9ef;
+      --border-bright: #d5dae4;
+      --s1: #2563eb;
+      --s2: #60a5fa;
+      --s3: #1e3a8a;
+      --s1-dim: #eff6ff;
+      --s2-dim: #eff6ff;
+      --s3-dim: #eff6ff;
+      --text: #1e293b;
+      --text-dim: #475569;
+      --text-mid: #64748b;
+      --text-strong: #0f172a;
+      --green: #0f766e;
+      --amber: #475569;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-tint: #eff6ff;
+      --accent-border: #bfdbfe;
       --mono: 'IBM Plex Mono', monospace;
       --sans: 'Syne', sans-serif;
       --radius: 8px;
-      --radius-lg: 14px;
+      --radius-lg: 16px;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
     html, body {
       font-family: var(--sans);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-
+ 
     /* Grid background */
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
+      display: none;
     }
-
+ 
     /* ── HEADER ── */
     header {
       position: relative;
       z-index: 1;
       padding: 48px 40px 32px;
-      border-bottom: 1px solid var(--border-bright);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
     }
-
+ 
     header .eyebrow {
       font-family: var(--mono);
       font-size: 0.7rem;
       letter-spacing: 4px;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--accent);
       margin-bottom: 14px;
       display: inline-block;
       padding: 6px 14px;
-      border: 1px solid var(--border-bright);
+      border: 1px solid var(--accent-border);
+      background: var(--accent-tint);
       border-radius: 20px;
+      font-weight: 700;
     }
-
+ 
     header h1 {
       font-size: clamp(2rem, 4vw, 3.4rem);
       font-weight: 800;
       letter-spacing: -1.5px;
       line-height: 1.05;
       margin-bottom: 10px;
-      background: linear-gradient(135deg, #fff 0%, var(--text) 60%, var(--text-mid) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-strong);
     }
-
+ 
     header .subtitle {
       font-family: var(--mono);
       font-size: 0.85rem;
-      color: var(--text-mid);
+      color: var(--text-dim);
       max-width: 620px;
     }
-
+ 
     header .badges {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 22px;
     }
-
+ 
     .badge {
       font-family: var(--mono);
       font-size: 0.7rem;
       font-weight: 700;
       padding: 6px 12px;
       border-radius: 20px;
-      border: 1px solid;
+      border: 1px solid var(--border);
+      background: var(--surface);
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
     .badge .dot { width: 7px; height: 7px; border-radius: 50%; }
-    .badge.s1 { color: var(--s1); background: var(--s1-dim); border-color: rgba(245,166,35,0.3); }
+    .badge.s1 { color: var(--s1); }
     .badge.s1 .dot { background: var(--s1); }
-    .badge.s2 { color: var(--s2); background: var(--s2-dim); border-color: rgba(62,207,207,0.3); }
+    .badge.s2 { color: var(--s2); }
     .badge.s2 .dot { background: var(--s2); }
-    .badge.s3 { color: var(--s3); background: var(--s3-dim); border-color: rgba(224,92,106,0.3); }
+    .badge.s3 { color: var(--s3); }
     .badge.s3 .dot { background: var(--s3); }
-
+ 
     main { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
     .section-title { display: flex; align-items: baseline; gap: 12px; margin: 48px 0 20px; }
-    .section-title .tag { font-family: var(--mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
-    .section-title .tag.s1 { background: var(--s1-dim); color: var(--s1); border: 1px solid rgba(245,166,35,0.3); }
-    .section-title .tag.s2 { background: var(--s2-dim); color: var(--s2); border: 1px solid rgba(62,207,207,0.3); }
-    .section-title .tag.s3 { background: var(--s3-dim); color: var(--s3); border: 1px solid rgba(224,92,106,0.3); }
-    .section-title h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
+    .section-title .tag { font-family: var(--mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
+    .section-title .tag.s1 { background: var(--accent-tint); color: var(--accent); border: 1px solid var(--accent-border); }
+    .section-title .tag.s2 { background: var(--accent-tint); color: var(--accent); border: 1px solid var(--accent-border); }
+    .section-title .tag.s3 { background: var(--accent-tint); color: var(--accent); border: 1px solid var(--accent-border); }
+    .section-title h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-strong); }
     .section-title .hint { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); margin-left: auto; }
-
-    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-    .toolbar { display: flex; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap; }
-    .toolbar input, .toolbar select { background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text); font-family: var(--mono); font-size: 0.82rem; padding: 9px 14px; border-radius: var(--radius); outline: none; transition: border-color 0.15s; }
-    .toolbar input:focus, .toolbar select:focus { border-color: var(--s1); }
+ 
+    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+    .toolbar { display: flex; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap; background: var(--surface); }
+    .toolbar input, .toolbar select { background: var(--surface); border: 1px solid var(--border-bright); color: var(--text); font-family: var(--mono); font-size: 0.82rem; padding: 9px 14px; border-radius: var(--radius); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .toolbar input::placeholder { color: var(--text-mid); }
+    .toolbar input:focus, .toolbar select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
     .toolbar input { flex: 1; min-width: 180px; }
     .btn { font-family: var(--mono); font-size: 0.76rem; font-weight: 700; padding: 9px 18px; border-radius: var(--radius); border: 1px solid; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.15s; }
-    .btn-primary { background: var(--s1); color: #000; border-color: var(--s1); }
-    .btn-primary:hover { background: #ffb840; }
-    .btn-ghost { background: transparent; color: var(--text-mid); border-color: var(--border-bright); }
-    .btn-ghost:hover { border-color: var(--text-mid); color: var(--text); }
-
+    .btn-primary { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn-ghost { background: transparent; color: var(--text-dim); border-color: var(--border-bright); }
+    .btn-ghost:hover { border-color: var(--text-dim); color: var(--text-strong); }
+ 
     .table-scroll { max-height: 520px; overflow: auto; }
     table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.78rem; }
-    thead th { position: sticky; top: 0; background: var(--surface2); text-align: left; padding: 12px 14px; font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border-bright); white-space: nowrap; }
+    thead th { position: sticky; top: 0; background: var(--surface2); text-align: left; padding: 12px 14px; font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); white-space: nowrap; }
     tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
-    tbody tr:hover { background: rgba(245,166,35,0.04); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #f8fafc; }
     td.numeric { text-align: right; font-variant-numeric: tabular-nums; }
-
-    td.size-Mega   { color: var(--s3); font-weight: 700; }
-    td.size-Large  { color: var(--amber); font-weight: 700; }
-    td.size-Medium { color: var(--s2); font-weight: 700; }
-    td.size-Small  { color: var(--green); font-weight: 700; }
-
-    td.stock-pos { color: var(--green); }
-    td.stock-neg { color: var(--s3); }
-    td.stock-neu { color: var(--text-mid); }
-
+ 
+    td.size-Mega   { color: #1e3a8a; font-weight: 700; letter-spacing: 0.5px; }
+    td.size-Large  { color: #2563eb; font-weight: 700; letter-spacing: 0.5px; }
+    td.size-Medium { color: #60a5fa; font-weight: 700; letter-spacing: 0.5px; }
+    td.size-Small  { color: #64748b; font-weight: 700; letter-spacing: 0.5px; }
+ 
+    td.stock-pos { color: #0f766e; }
+    td.stock-neg { color: #b91c1c; }
+    td.stock-neu { color: #475569; }
+ 
     .ai-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; }
-    .ai-pill.yes { background: var(--s3-dim); color: var(--s3); border: 1px solid rgba(224,92,106,0.3); }
-    .ai-pill.no  { color: var(--text-dim); }
-
+    .ai-pill.yes { background: var(--accent-tint); color: var(--accent); border: 1px solid var(--accent-border); }
+    .ai-pill.no  { color: var(--text-mid); }
+ 
     .placeholder-row td { padding: 40px; text-align: center; color: var(--text-dim); font-style: italic; }
-
+ 
     .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px; }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; position: relative; overflow: hidden; }
-    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--s3); }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; position: relative; overflow: hidden; box-shadow: var(--shadow); }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent); }
     .stat-card .label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
-    .stat-card .value { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: #fff; line-height: 1; }
-    .stat-card .value.pending { color: var(--text-dim); font-size: 1.2rem; font-style: italic; }
-
+    .stat-card .value { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--text-strong); line-height: 1; }
+    .stat-card .value.pending { color: var(--text-mid); font-size: 1.2rem; font-style: italic; }
+ 
     .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; }
-    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; min-height: 360px; display: flex; flex-direction: column; }
-    .chart-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; min-height: 360px; display: flex; flex-direction: column; box-shadow: var(--shadow); }
+    .chart-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; color: var(--text-strong); }
     .chart-card .chart-sub { font-family: var(--mono); font-size: 0.68rem; color: var(--text-dim); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
     .chart-wrap { position: relative; flex: 1; min-height: 280px; }
     canvas { max-width: 100%; }
-    .chart-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: var(--text-dim); font-family: var(--mono); font-size: 0.78rem; border: 1px dashed var(--border-bright); border-radius: var(--radius); background: var(--surface2); text-align: center; padding: 20px; }
+    .chart-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: var(--text-mid); font-family: var(--mono); font-size: 0.78rem; border: 1px dashed var(--border-bright); border-radius: var(--radius); background: #f7f8fb; text-align: center; padding: 20px; }
     .chart-placeholder .emoji { font-size: 1.6rem; opacity: 0.5; }
-
-    .regression { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; margin-top: 22px; }
+ 
+    .regression { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; margin-top: 22px; box-shadow: var(--shadow); }
     .reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px; }
     .reg-item .label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
-    .reg-item .value { font-family: var(--mono); font-size: 1.2rem; font-weight: 700; color: var(--s3); }
-    .reg-equation { background: var(--surface2); border: 1px solid var(--border-bright); border-radius: var(--radius); padding: 14px 18px; font-family: var(--mono); font-size: 0.9rem; color: var(--s3); text-align: center; margin-bottom: 12px; }
-    .reg-interp { font-family: var(--mono); font-size: 0.78rem; color: var(--text-mid); text-align: center; padding: 10px; letter-spacing: 1px; }
-
-    .desc-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 22px; }
+    .reg-item .value { font-family: var(--mono); font-size: 1.2rem; font-weight: 700; color: var(--text-strong); }
+    .reg-equation { background: var(--accent-tint); border: 1px solid var(--accent-border); border-radius: var(--radius); padding: 14px 18px; font-family: var(--mono); font-size: 0.9rem; color: var(--accent); text-align: center; margin-bottom: 12px; font-weight: 500; }
+    .reg-interp { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-align: center; padding: 10px; letter-spacing: 1px; }
+ 
+    .desc-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 22px; box-shadow: var(--shadow); }
     .desc-item { background: var(--surface); padding: 16px; text-align: center; }
     .desc-item .label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
-    .desc-item .value { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; color: var(--text); }
-
+    .desc-item .value { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; color: var(--text-strong); }
+ 
     footer { position: relative; z-index: 1; text-align: center; padding: 30px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim); letter-spacing: 2px; }
-
+ 
     @media (max-width: 700px) {
       header { padding: 32px 20px 24px; }
       .chart-grid { grid-template-columns: 1fr; }
@@ -203,7 +205,7 @@
   </style>
 </head>
 <body>
-
+ 
 <header>
   <span class="eyebrow">Computer Science Dept · Collaborative Git Project</span>
   <h1>Tech Layoffs 2026</h1>
@@ -214,16 +216,16 @@
     <span class="badge s3"><span class="dot"></span>S3 · Statistics</span>
   </div>
 </header>
-
+ 
 <main>
-
+ 
   <!-- SECTION 1 · TABLE (Student 1) -->
   <div class="section-title">
     <span class="tag s1">S1</span>
     <h2>Layoffs Dataset</h2>
     <span class="hint" id="rowCount">— rows</span>
   </div>
-
+ 
   <div class="table-card">
     <div class="toolbar">
       <input type="text" id="filterInput" placeholder="Filter by company, sector, or country…" />
@@ -240,7 +242,7 @@
       <button class="btn btn-primary" onclick="applyFilterSort()">Apply</button>
       <button class="btn btn-ghost" onclick="resetTable()">Reset</button>
     </div>
-
+ 
     <div class="table-scroll">
       <table>
         <thead>
@@ -266,8 +268,8 @@
       </table>
     </div>
   </div>
-
-
+ 
+ 
   <!-- ═══════════════════════════════════════════════
        SECTION 2 · STATISTICS ENGINE  (Student 3)
   ═══════════════════════════════════════════════ -->
@@ -277,7 +279,7 @@
   <h2>Statistical Analysis</h2>
   <span class="hint">Computed from AI Investment ($B)</span>
 </div>
-
+ 
 <!-- Summary stat cards -->
 <div class="stat-grid">
   <div class="stat-card">
@@ -297,7 +299,7 @@
     <div class="value" id="statMode">None</div>
   </div>
 </div>
-
+ 
 <!-- Descriptive strip -->
 <div class="desc-strip">
   <div class="desc-item"><div class="label">Count</div><div class="value" id="dCount">20</div></div>
@@ -307,7 +309,7 @@
   <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">562.38</div></div>
   <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">23.72</div></div>
 </div>
-
+ 
 <!-- Regression panel -->
 <div class="regression">
   <div class="section-title" style="margin: 0 0 16px;">
@@ -324,14 +326,14 @@
     Moderate Positive Correlation (r = 0.5579)
   </div>
 </div>
-
+ 
   <!-- SECTION 3 · CHARTS (Student 2) -->
   <div class="section-title">
     <span class="tag s2">S2</span>
     <h2>Visualizations</h2>
     <span class="hint">Chart.js v4</span>
   </div>
-
+ 
   <div class="chart-grid">
     <div class="chart-card">
       <h3>Top 10 Companies by Jobs Cut</h3>
@@ -344,7 +346,7 @@
         <canvas id="barChart" style="display:none;"></canvas>
       </div>
     </div>
-
+ 
     <div class="chart-card">
       <h3>AI Investment vs Jobs Cut</h3>
       <div class="chart-sub">Scatter · one dot per company</div>
@@ -356,7 +358,7 @@
         <canvas id="scatterChart" style="display:none;"></canvas>
       </div>
     </div>
-
+ 
     <div class="chart-card">
       <h3>% Workforce Cut Distribution</h3>
       <div class="chart-sub">Histogram · severity bins</div>
@@ -368,7 +370,7 @@
         <canvas id="histChart" style="display:none;"></canvas>
       </div>
     </div>
-
+ 
     <div class="chart-card">
       <h3>Layoffs by Region</h3>
       <div class="chart-sub">Doughnut · North America / Europe / Asia-Pacific</div>
@@ -381,14 +383,14 @@
       </div>
     </div>
   </div>
-
+ 
 </main>
-
+ 
 <footer>
   TECH LAYOFFS 2026 · DATASCI COLLAB · S1 · S2 · S3
 </footer>
-
-
+ 
+ 
 <!-- ═══════════════════════════════════════════════════════════════════════════
      JAVASCRIPT — SHARED CONTRACT BELOW
      ════════════════════════════════════════
@@ -397,17 +399,17 @@
      Do not mutate RAW_DATA. Do not commit directly to main.
 ═══════════════════════════════════════════════════════════════════════════ -->
 <script>
-
+ 
 /* ───────────────────────────────────────────────────────────
    SHARED · DO NOT MODIFY — Globals & orchestration
    ─────────────────────────────────────────────────────────── */
-
+ 
 // Global dataset — written by Student 1, read by Students 2 & 3.
 window.DS = [];
-
+ 
 // Global chart registry — used by Student 2 to destroy old chart instances.
 window.CHARTS = {};
-
+ 
 /**
  * onDataReady() is the SHARED trigger fired at the end of loadDataset().
  * It signals Students 2 and 3 that window.DS is populated and ready.
@@ -417,12 +419,12 @@ window.CHARTS = {};
 function onDataReady() {
   // Student 2: charts initialized after data is loaded
   initCharts();
-
+ 
   // Student 3: uncomment when renderStats() is implemented
   // renderStats(window.DS);
 }
-
-
+ 
+ 
 /* ═══════════════════════════════════════════════════════════
    ╔═══════════════════════════════════════════════════════╗
    ║  STUDENT 1 — DATASET ENGINE                           ║
@@ -431,7 +433,7 @@ function onDataReady() {
    ║                    applyFilterSort, resetTable        ║
    ╚═══════════════════════════════════════════════════════╝
    ═══════════════════════════════════════════════════════════ */
-
+ 
 // ── RAW_DATA ──────────────────────────────────────────────
 // Source of truth. NEVER mutate this array directly.
 // 20 students with 8 fields each.
@@ -465,7 +467,7 @@ const RAW_DATA = [
   { company: "Meta Platforms (Planned)", layoffDate: "2026-03-13", jobsCut: 16000, pctWorkforceCut: 20.0, sector: "Social Media/AI", country: "USA", hqCity: "Menlo Park", aiCited: true, reasonStated: "Offset AI infrastructure costs", revenueBn: 164.5, preHeadcount: 79000, stockChangePct: 3.0, aiInvestBn: 115.0, rolesAffected: "Engineering, middle management, ops", replacementRoles: "AI engineers, GPU infrastructure", ceoQuote: "Building personal superintelligence", layoffs2024: 0, layoffs2025: 0, source: "CNBC / Reuters / IBTimes", month: "March 2026", quarter: "Q1 2026", region: "North America", sizeCategory: "Mega (5K+)", stockReaction: "Positive", laidOffVsHeadcountPct: 20.25 },
   { company: "Algoma Steel (Effective)", layoffDate: "2026-03-23", jobsCut: 1000, pctWorkforceCut: 20.0, sector: "Manufacturing", country: "Canada", hqCity: "Sault Ste Marie", aiCited: false, reasonStated: "Blast furnace closure effective", revenueBn: 2.8, preHeadcount: 5000, stockChangePct: -1.5, aiInvestBn: 0.0, rolesAffected: "Steel workers", replacementRoles: "None announced", ceoQuote: "Effective layoff date per filing", layoffs2024: 0, layoffs2025: 0, source: "Intellizence", month: "March 2026", quarter: "Q1 2026", region: "North America", sizeCategory: "Medium (500-2K)", stockReaction: "Negative", laidOffVsHeadcountPct: 20.0 }
 ];
-
+ 
 function sizeShort(cat) {
   if (cat.startsWith('Mega'))   return { short: 'Mega',   cls: 'size-Mega'   };
   if (cat.startsWith('Large'))  return { short: 'Large',  cls: 'size-Large'  };
@@ -486,7 +488,7 @@ function loadDataset() {
   document.getElementById('rowCount').textContent = window.DS.length + ' rows';
   onDataReady(); // MUST be last — signals S2 and S3 that data is ready
 }
-
+ 
 // ── TASK 2: renderTable(data) ─────────────────────────────
 // Dynamically builds every <tr> and injects it into #tableBody.
 function renderTable(data) {
@@ -499,7 +501,7 @@ function renderTable(data) {
       ? '<span class="ai-pill yes">AI</span>'
       : '<span class="ai-pill no">—</span>';
     const stockDisplay = (row.stockChangePct > 0 ? '+' : '') + row.stockChangePct.toFixed(1) + '%';
-
+ 
     const tr = `<tr>
       <td>${i + 1}</td>
       <td>${row.company}</td>
@@ -516,21 +518,21 @@ function renderTable(data) {
     tbody.insertAdjacentHTML('beforeend', tr);
   });
 }
-
-
+ 
+ 
 // ── TASK 3: applyFilterSort() ─────────────────────────────
 // Reads the filter/sort controls, applies them to a COPY of window.DS,
 // and re-renders. Never mutates window.DS.
 function applyFilterSort() {
   const query   = document.getElementById('filterInput').value.toLowerCase();
   const sortKey = document.getElementById('sortSelect').value;
-
+ 
   let result = window.DS.filter(row =>
     row.company.toLowerCase().includes(query) ||
     row.sector.toLowerCase().includes(query)  ||
     row.country.toLowerCase().includes(query)
   );
-
+ 
   if (sortKey) {
     result.sort((a, b) => {
       if (sortKey === 'company')    return a.company.localeCompare(b.company);
@@ -538,11 +540,11 @@ function applyFilterSort() {
       return b[sortKey] - a[sortKey];
     });
   }
-
+ 
   renderTable(result);
   document.getElementById('rowCount').textContent = result.length + ' rows';
 }
-
+ 
 // ── TASK 4: resetTable() ──────────────────────────────────
 // Clears the toolbar and restores the full dataset view.
 function resetTable() {
@@ -551,13 +553,13 @@ function resetTable() {
   renderTable(window.DS);
   document.getElementById('rowCount').textContent = window.DS.length + ' rows';
 }
-
-
+ 
+ 
 /* ═══════════════════════════════════════════════════════════
    STUDENT 2 — VISUALIZATION LAYER
    Branch: feature/visualization
 ═══════════════════════════════════════════════════════════ */
-
+ 
 function initCharts() {
   ['barChart', 'scatterChart', 'histChart', 'pieChart'].forEach(id => {
     if (window.CHARTS[id]) window.CHARTS[id].destroy();
@@ -567,16 +569,16 @@ function initCharts() {
   drawHistogram('histChart', window.DS);
   drawPieChart('pieChart', window.DS);
 }
-
+ 
 // BAR — Top 10 companies by jobsCut, descending
 function drawBarChart(canvasId, data) {
   const top10 = [...data].sort((a, b) => b.jobsCut - a.jobsCut).slice(0, 10);
   const labels = top10.map(d => d.company);
   const values = top10.map(d => d.jobsCut);
-
+ 
   document.getElementById('barChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
-
+ 
   const ctx = document.getElementById(canvasId).getContext('2d');
   window.CHARTS[canvasId] = new Chart(ctx, {
     type: 'bar',
@@ -585,8 +587,8 @@ function drawBarChart(canvasId, data) {
       datasets: [{
         label: 'Jobs Cut',
         data: values,
-        backgroundColor: 'rgba(240,180,41,0.8)',
-        borderColor: '#f0b429',
+        backgroundColor: 'rgba(37,99,235,0.85)',
+        borderColor: '#2563eb',
         borderWidth: 1,
         borderRadius: 3,
       }]
@@ -596,28 +598,28 @@ function drawBarChart(canvasId, data) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        legend: { labels: { color: '#334155', font: { family: 'IBM Plex Mono', size: 11 } } },
         tooltip: {
-          backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
-          titleColor: '#f0b429', bodyColor: '#c8d4ee',
+          backgroundColor: '#ffffff', borderColor: '#e6e9ef', borderWidth: 1,
+          titleColor: '#0f172a', bodyColor: '#334155',
           callbacks: { label: ctx => ` ${ctx.parsed.x.toLocaleString()} jobs cut` }
         }
       },
       scales: {
-        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#1e2738' } },
-        y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } }
+        x: { ticks: { color: '#475569', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#e6e9ef' } },
+        y: { ticks: { color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#e6e9ef' } }
       }
     }
   });
 }
-
+ 
 // SCATTER — AI Investment ($B) vs Jobs Cut
 function drawScatterPlot(canvasId, data) {
   const points = data.map(d => ({ x: d.aiInvestBn, y: d.jobsCut, name: d.company }));
-
+ 
   document.getElementById('scatterChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
-
+ 
   const ctx = document.getElementById(canvasId).getContext('2d');
   window.CHARTS[canvasId] = new Chart(ctx, {
     type: 'scatter',
@@ -625,8 +627,8 @@ function drawScatterPlot(canvasId, data) {
       datasets: [{
         label: 'Company',
         data: points,
-        backgroundColor: 'rgba(62,207,207,0.7)',
-        borderColor: '#3ecfcf',
+        backgroundColor: 'rgba(37,99,235,0.7)',
+        borderColor: '#2563eb',
         pointRadius: 6,
         pointHoverRadius: 8,
       }]
@@ -635,31 +637,31 @@ function drawScatterPlot(canvasId, data) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        legend: { labels: { color: '#334155', font: { family: 'IBM Plex Mono', size: 11 } } },
         tooltip: {
-          backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
-          titleColor: '#3ecfcf', bodyColor: '#c8d4ee',
+          backgroundColor: '#ffffff', borderColor: '#e6e9ef', borderWidth: 1,
+          titleColor: '#0f172a', bodyColor: '#334155',
           callbacks: {
             label: ctx => ` ${ctx.raw.name} — $${ctx.raw.x}B invested, ${ctx.raw.y.toLocaleString()} jobs cut`
           }
         }
       },
       scales: {
-        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
-             title: { display: true, text: 'AI Investment ($B)', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } },
-        y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#1e2738' },
-             title: { display: true, text: 'Jobs Cut', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
+        x: { ticks: { color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#e6e9ef' },
+             title: { display: true, text: 'AI Investment ($B)', color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } } },
+        y: { ticks: { color: '#475569', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#e6e9ef' },
+             title: { display: true, text: 'Jobs Cut', color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } } }
       }
     }
   });
 }
-
+ 
 // HISTOGRAM — Distribution of pctWorkforceCut
 function drawHistogram(canvasId, data) {
   const bins   = [0, 5, 10, 20, 30, 50];
   const labels = ['0–5%', '5–10%', '10–20%', '20–30%', '30%+'];
   const counts = new Array(labels.length).fill(0);
-
+ 
   data.forEach(d => {
     const v = d.pctWorkforceCut;
     for (let i = 0; i < bins.length - 1; i++) {
@@ -667,10 +669,10 @@ function drawHistogram(canvasId, data) {
       if (i === bins.length - 2 && v >= bins[bins.length - 1]) counts[i]++;
     }
   });
-
+ 
   document.getElementById('histChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
-
+ 
   const ctx = document.getElementById(canvasId).getContext('2d');
   window.CHARTS[canvasId] = new Chart(ctx, {
     type: 'bar',
@@ -679,8 +681,8 @@ function drawHistogram(canvasId, data) {
       datasets: [{
         label: 'Companies',
         data: counts,
-        backgroundColor: 'rgba(224,92,106,0.75)',
-        borderColor: '#e05c6a',
+        backgroundColor: 'rgba(30,58,138,0.75)',
+        borderColor: '#1e3a8a',
         borderWidth: 1,
         barPercentage: 1.0,
         categoryPercentage: 1.0,
@@ -690,19 +692,19 @@ function drawHistogram(canvasId, data) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
-        tooltip: { backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1, titleColor: '#e05c6a', bodyColor: '#c8d4ee' }
+        legend: { labels: { color: '#334155', font: { family: 'IBM Plex Mono', size: 11 } } },
+        tooltip: { backgroundColor: '#ffffff', borderColor: '#e6e9ef', borderWidth: 1, titleColor: '#0f172a', bodyColor: '#334155' }
       },
       scales: {
-        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
-             title: { display: true, text: '% Workforce Cut', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } },
-        y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, stepSize: 1 }, grid: { color: '#1e2738' },
-             title: { display: true, text: '# Companies', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
+        x: { ticks: { color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#e6e9ef' },
+             title: { display: true, text: '% Workforce Cut', color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } } },
+        y: { ticks: { color: '#475569', font: { family: 'IBM Plex Mono', size: 10 }, stepSize: 1 }, grid: { color: '#e6e9ef' },
+             title: { display: true, text: '# Companies', color: '#475569', font: { family: 'IBM Plex Mono', size: 10 } } }
       }
     }
   });
 }
-
+ 
 // PIE — Total jobsCut grouped by region
 function drawPieChart(canvasId, data) {
   const regionTotals = {};
@@ -710,10 +712,10 @@ function drawPieChart(canvasId, data) {
   const labels = Object.keys(regionTotals);
   const values = labels.map(r => regionTotals[r]);
   const total  = values.reduce((s, v) => s + v, 0);
-
+ 
   document.getElementById('pieChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
-
+ 
   const ctx = document.getElementById(canvasId).getContext('2d');
   window.CHARTS[canvasId] = new Chart(ctx, {
     type: 'doughnut',
@@ -721,8 +723,8 @@ function drawPieChart(canvasId, data) {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#56d364', '#f0b429', '#3ecfcf', '#e05c6a'],
-        borderColor: '#0f1319',
+        backgroundColor: ['#2563eb', '#60a5fa', '#1e3a8a', '#64748b'],
+        borderColor: '#ffffff',
         borderWidth: 2,
       }]
     },
@@ -731,10 +733,10 @@ function drawPieChart(canvasId, data) {
       maintainAspectRatio: false,
       cutout: '55%',
       plugins: {
-        legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
+        legend: { labels: { color: '#334155', font: { family: 'IBM Plex Mono', size: 11 } } },
         tooltip: {
-          backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
-          titleColor: '#3ecfcf', bodyColor: '#c8d4ee',
+          backgroundColor: '#ffffff', borderColor: '#e6e9ef', borderWidth: 1,
+          titleColor: '#0f172a', bodyColor: '#334155',
           callbacks: {
             label: ctx => {
               const pct = ((ctx.parsed / total) * 100).toFixed(1);
@@ -746,7 +748,7 @@ function drawPieChart(canvasId, data) {
     }
   });
 }
-
+ 
 document.addEventListener('DOMContentLoaded', loadDataset);
 </script>
 </body>
