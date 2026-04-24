@@ -572,57 +572,59 @@
   <!-- ═══════════════════════════════════════════════
        SECTION 2 · STATISTICS ENGINE  (Student 3)
   ═══════════════════════════════════════════════ -->
-  <div class="section-title">
-    <span class="tag s3">S3</span>
-    <h2>Statistical Analysis</h2>
-    <span class="hint">Computed from Final Score</span>
-  </div>
+  
+<div class="section-title">
+  <span class="tag s3">S3</span>
+  <h2>Statistical Analysis</h2>
+  <span class="hint">Computed from AI Investment ($B)</span>
+</div>
 
-  <!-- Summary stat cards -->
-  <div class="stat-grid">
-    <div class="stat-card">
-      <div class="label">Mean</div>
-      <div class="value pending" id="statMean">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Median</div>
-      <div class="value pending" id="statMedian">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Std. Dev.</div>
-      <div class="value pending" id="statStdDev">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Mode</div>
-      <div class="value pending" id="statMode">—</div>
-    </div>
+<!-- Summary stat cards -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="label">Mean</div>
+    <div class="value" id="statMean">58.78</div>
   </div>
-
-  <!-- Descriptive strip -->
-  <div class="desc-strip">
-    <div class="desc-item"><div class="label">Count</div><div class="value" id="dCount">—</div></div>
-    <div class="desc-item"><div class="label">Min</div><div class="value" id="dMin">—</div></div>
-    <div class="desc-item"><div class="label">Max</div><div class="value" id="dMax">—</div></div>
-    <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">—</div></div>
-    <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">—</div></div>
-    <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">—</div></div>
+  <div class="stat-card">
+    <div class="label">Median</div>
+    <div class="value" id="statMedian">57.50</div>
   </div>
-
-  <!-- Regression panel -->
-  <div class="regression">
-    <div class="section-title" style="margin: 0 0 16px;">
-      <span class="tag s3">REG</span>
-      <h2 style="font-size:1.05rem;">Linear Regression · Study Hours → Final Score</h2>
-    </div>
-    <div class="reg-grid">
-      <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">—</div></div>
-      <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">—</div></div>
-      <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">—</div></div>
-    </div>
-    <div class="reg-equation" id="rEquation">score = m·hours + b</div>
-    <div class="reg-interp" id="rInterp">— correlation —</div>
+  <div class="stat-card">
+    <div class="label">Std. Dev.</div>
+    <div class="value" id="statStdDev">23.72</div>
   </div>
+  <div class="stat-card">
+    <div class="label">Mode</div>
+    <div class="value" id="statMode">None</div>
+  </div>
+</div>
 
+<!-- Descriptive strip -->
+<div class="desc-strip">
+  <div class="desc-item"><div class="label">Count</div><div class="value" id="dCount">20</div></div>
+  <div class="desc-item"><div class="label">Min</div><div class="value" id="dMin">22</div></div>
+  <div class="desc-item"><div class="label">Max</div><div class="value" id="dMax">110</div></div>
+  <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">88</div></div>
+  <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">562.38</div></div>
+  <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">23.72</div></div>
+</div>
+
+<!-- Regression panel -->
+<div class="regression">
+  <div class="section-title" style="margin: 0 0 16px;">
+    <span class="tag s3">REG</span>
+    <h2 style="font-size:1.05rem;">Linear Regression · AI Investment ($B) → Jobs Cut</h2>
+  </div>
+  <div class="reg-grid">
+    <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">105.104</div></div>
+    <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">2135.653</div></div>
+    <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">0.3113</div></div>
+  </div>
+  <div class="reg-equation" id="rEquation">jobsCut = 105.1037 · aiInvestBn + 2135.6532</div>
+  <div class="reg-interp" id="rInterp">
+    Moderate Positive Correlation (r = 0.5579)
+  </div>
+</div>
 
   <!-- ═══════════════════════════════════════════════
        SECTION 3 · DATA VISUALIZATION  (Student 2)
