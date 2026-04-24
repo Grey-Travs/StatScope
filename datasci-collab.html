@@ -482,21 +482,20 @@ function resetTable() {
 ═══════════════════════════════════════════════════════════ */
 
 function initCharts() {
-  if (window.CHARTS['barChart'])     window.CHARTS['barChart'].destroy();
-  if (window.CHARTS['scatterChart']) window.CHARTS['scatterChart'].destroy();
-  if (window.CHARTS['histChart'])    window.CHARTS['histChart'].destroy();
-  if (window.CHARTS['pieChart'])     window.CHARTS['pieChart'].destroy();
-
+  ['barChart', 'scatterChart', 'histChart', 'pieChart'].forEach(id => {
+    if (window.CHARTS[id]) window.CHARTS[id].destroy();
+  });
   drawBarChart('barChart', window.DS);
   drawScatterPlot('scatterChart', window.DS);
   drawHistogram('histChart', window.DS);
   drawPieChart('pieChart', window.DS);
 }
 
+// BAR — Top 10 companies by jobsCut, descending
 function drawBarChart(canvasId, data) {
-  const sorted = [...data].sort((a, b) => a.studyHours - b.studyHours);
-  const labels = sorted.map(d => d.name.split(' ')[0]);
-  const scores = sorted.map(d => d.score);
+  const top10 = [...data].sort((a, b) => b.jobsCut - a.jobsCut).slice(0, 10);
+  const labels = top10.map(d => d.company);
+  const values = top10.map(d => d.jobsCut);
 
   document.getElementById('barChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
@@ -507,8 +506,8 @@ function drawBarChart(canvasId, data) {
     data: {
       labels,
       datasets: [{
-        label: 'Final Score',
-        data: scores,
+        label: 'Jobs Cut',
+        data: values,
         backgroundColor: 'rgba(240,180,41,0.8)',
         borderColor: '#f0b429',
         borderWidth: 1,
@@ -516,23 +515,28 @@ function drawBarChart(canvasId, data) {
       }]
     },
     options: {
+      indexAxis: 'y',  // horizontal bars - easier to read long company names
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: { labels: { color: '#8a97b8', font: { family: 'IBM Plex Mono', size: 11 } } },
-        tooltip: { backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1, titleColor: '#f0b429', bodyColor: '#c8d4ee' }
+        tooltip: {
+          backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
+          titleColor: '#f0b429', bodyColor: '#c8d4ee',
+          callbacks: { label: ctx => ` ${ctx.parsed.x.toLocaleString()} jobs cut` }
+        }
       },
       scales: {
-        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } },
-        y: { min: 0, max: 100, ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } }
+        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#1e2738' } },
+        y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } }
       }
     }
   });
 }
 
+// SCATTER — AI Investment ($B) vs Jobs Cut
 function drawScatterPlot(canvasId, data) {
-  // scatter plot: attendance % vs final score per student
-  const points = data.map(d => ({ x: d.attendance, y: d.score, name: d.name }));
+  const points = data.map(d => ({ x: d.aiInvestBn, y: d.jobsCut, name: d.company }));
 
   document.getElementById('scatterChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
@@ -542,7 +546,7 @@ function drawScatterPlot(canvasId, data) {
     type: 'scatter',
     data: {
       datasets: [{
-        label: 'Student',
+        label: 'Company',
         data: points,
         backgroundColor: 'rgba(62,207,207,0.7)',
         borderColor: '#3ecfcf',
@@ -559,30 +563,31 @@ function drawScatterPlot(canvasId, data) {
           backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1,
           titleColor: '#3ecfcf', bodyColor: '#c8d4ee',
           callbacks: {
-            label: ctx => ` ${ctx.raw.name} — Attendance: ${ctx.raw.x}%, Score: ${ctx.raw.y}`
+            label: ctx => ` ${ctx.raw.name} — $${ctx.raw.x}B invested, ${ctx.raw.y.toLocaleString()} jobs cut`
           }
         }
       },
       scales: {
-        x: { min: 50, max: 100, ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
-             title: { display: true, text: 'Attendance %', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } },
-        y: { min: 40, max: 100, ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
-             title: { display: true, text: 'Final Score', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
+        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
+             title: { display: true, text: 'AI Investment ($B)', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } },
+        y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v.toLocaleString() }, grid: { color: '#1e2738' },
+             title: { display: true, text: 'Jobs Cut', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
       }
     }
   });
 }
 
+// HISTOGRAM — Distribution of pctWorkforceCut
 function drawHistogram(canvasId, data) {
-  // histogram implementation
-  const bins   = [40, 50, 60, 70, 80, 90, 100];
-  const labels = ['40s', '50s', '60s', '70s', '80s', '90s+'];
-  const counts = new Array(6).fill(0);
+  const bins   = [0, 5, 10, 20, 30, 50];
+  const labels = ['0–5%', '5–10%', '10–20%', '20–30%', '30%+'];
+  const counts = new Array(labels.length).fill(0);
 
   data.forEach(d => {
+    const v = d.pctWorkforceCut;
     for (let i = 0; i < bins.length - 1; i++) {
-      if (d.score >= bins[i] && d.score < bins[i + 1]) { counts[i]++; break; }
-      if (i === bins.length - 2 && d.score === 100) counts[i]++;
+      if (v >= bins[i] && v < bins[i + 1]) { counts[i]++; break; }
+      if (i === bins.length - 2 && v >= bins[bins.length - 1]) counts[i]++;
     }
   });
 
@@ -595,7 +600,7 @@ function drawHistogram(canvasId, data) {
     data: {
       labels,
       datasets: [{
-        label: 'Students',
+        label: 'Companies',
         data: counts,
         backgroundColor: 'rgba(224,92,106,0.75)',
         borderColor: '#e05c6a',
@@ -612,22 +617,22 @@ function drawHistogram(canvasId, data) {
         tooltip: { backgroundColor: '#161c27', borderColor: '#2e3d58', borderWidth: 1, titleColor: '#e05c6a', bodyColor: '#c8d4ee' }
       },
       scales: {
-        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' } },
+        x: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } }, grid: { color: '#1e2738' },
+             title: { display: true, text: '% Workforce Cut', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } },
         y: { ticks: { color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 }, stepSize: 1 }, grid: { color: '#1e2738' },
-             title: { display: true, text: 'Count', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
+             title: { display: true, text: '# Companies', color: '#5a6882', font: { family: 'IBM Plex Mono', size: 10 } } }
       }
     }
   });
 }
 
+// PIE — Total jobsCut grouped by region
 function drawPieChart(canvasId, data) {
-  // pie chart implementation
-  const gradeCounts = { A: 0, B: 0, C: 0, D: 0 };
-  data.forEach(d => { if (gradeCounts[d.grade] !== undefined) gradeCounts[d.grade]++; });
-
-  const labels = ['A', 'B', 'C', 'D'];
-  const counts = labels.map(g => gradeCounts[g]);
-  const total  = counts.reduce((s, v) => s + v, 0);
+  const regionTotals = {};
+  data.forEach(d => { regionTotals[d.region] = (regionTotals[d.region] || 0) + d.jobsCut; });
+  const labels = Object.keys(regionTotals);
+  const values = labels.map(r => regionTotals[r]);
+  const total  = values.reduce((s, v) => s + v, 0);
 
   document.getElementById('pieChartPlaceholder').style.display = 'none';
   document.getElementById(canvasId).style.display = 'block';
@@ -638,7 +643,7 @@ function drawPieChart(canvasId, data) {
     data: {
       labels,
       datasets: [{
-        data: counts,
+        data: values,
         backgroundColor: ['#56d364', '#f0b429', '#3ecfcf', '#e05c6a'],
         borderColor: '#0f1319',
         borderWidth: 2,
@@ -656,7 +661,7 @@ function drawPieChart(canvasId, data) {
           callbacks: {
             label: ctx => {
               const pct = ((ctx.parsed / total) * 100).toFixed(1);
-              return ` Grade ${ctx.label}: ${ctx.parsed} students (${pct}%)`;
+              return ` ${ctx.label}: ${ctx.parsed.toLocaleString()} jobs (${pct}%)`;
             }
           }
         }
