@@ -448,11 +448,16 @@ function applyFilterSort() {
   const query   = document.getElementById('filterInput').value.toLowerCase();
   const sortKey = document.getElementById('sortSelect').value;
 
-  let result = window.DS.filter(row => row.name.toLowerCase().includes(query));
+  let result = window.DS.filter(row =>
+    row.company.toLowerCase().includes(query) ||
+    row.sector.toLowerCase().includes(query)  ||
+    row.country.toLowerCase().includes(query)
+  );
 
   if (sortKey) {
     result.sort((a, b) => {
-      if (sortKey === 'name') return a.name.localeCompare(b.name);
+      if (sortKey === 'company')    return a.company.localeCompare(b.company);
+      if (sortKey === 'layoffDate') return b.layoffDate.localeCompare(a.layoffDate);
       return b[sortKey] - a[sortKey];
     });
   }
