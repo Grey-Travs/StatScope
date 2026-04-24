@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataSci Collab — Student Performance Dashboard</title>
+  <title>Tech Layoffs 2026 Tracker — DataSci Collab</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Chart.js (for Student 2) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
@@ -20,110 +18,32 @@
       --surface2: #161c27;
       --border: #1e2738;
       --border-bright: #2e3d58;
-
-      --s1: #f5a623;   /* amber — Student 1 (table) */
-      --s2: #3ecfcf;   /* teal  — Student 2 (charts) */
-      --s3: #e05c6a;   /* coral — Student 3 (stats) */
-
+      --s1: #f5a623;
+      --s2: #3ecfcf;
+      --s3: #e05c6a;
       --s1-dim: rgba(245,166,35,0.12);
       --s2-dim: rgba(62,207,207,0.12);
       --s3-dim: rgba(224,92,106,0.12);
-
       --text: #c8d4ee;
       --text-dim: #5a6882;
       --text-mid: #8a97b8;
-
       --green: #56d364;
       --amber: #f0b429;
-
       --mono: 'IBM Plex Mono', monospace;
       --sans: 'Syne', sans-serif;
-
       --radius: 8px;
       --radius-lg: 14px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; opacity: 0.3; pointer-events: none; z-index: 0; }
 
-    html, body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-
-    /* Grid background */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── HEADER ── */
-    header {
-      position: relative;
-      z-index: 1;
-      padding: 48px 40px 32px;
-      border-bottom: 1px solid var(--border-bright);
-    }
-
-    header .eyebrow {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 14px;
-      display: inline-block;
-      padding: 6px 14px;
-      border: 1px solid var(--border-bright);
-      border-radius: 20px;
-    }
-
-    header h1 {
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1.05;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, #fff 0%, var(--text) 60%, var(--text-mid) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    header .subtitle {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      color: var(--text-mid);
-      max-width: 620px;
-    }
-
-    header .badges {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 22px;
-    }
-
-    .badge {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 20px;
-      border: 1px solid;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+    header { position: relative; z-index: 1; padding: 48px 40px 32px; border-bottom: 1px solid var(--border-bright); }
+    header .eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; display: inline-block; padding: 6px 14px; border: 1px solid var(--border-bright); border-radius: 20px; }
+    header h1 { font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 10px; background: linear-gradient(135deg, #fff 0%, var(--text) 60%, var(--text-mid) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    header .subtitle { font-family: var(--mono); font-size: 0.85rem; color: var(--text-mid); max-width: 620px; }
+    header .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+    .badge { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; border: 1px solid; display: inline-flex; align-items: center; gap: 8px; }
     .badge .dot { width: 7px; height: 7px; border-radius: 50%; }
     .badge.s1 { color: var(--s1); background: var(--s1-dim); border-color: rgba(245,166,35,0.3); }
     .badge.s1 .dot { background: var(--s1); }
@@ -132,368 +52,77 @@
     .badge.s3 { color: var(--s3); background: var(--s3-dim); border-color: rgba(224,92,106,0.3); }
     .badge.s3 .dot { background: var(--s3); }
 
-    /* ── MAIN LAYOUT ── */
-    main {
-      position: relative;
-      z-index: 1;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      margin: 48px 0 20px;
-    }
-    .section-title .tag {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      padding: 4px 10px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
+    main { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+    .section-title { display: flex; align-items: baseline; gap: 12px; margin: 48px 0 20px; }
+    .section-title .tag { font-family: var(--mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
     .section-title .tag.s1 { background: var(--s1-dim); color: var(--s1); border: 1px solid rgba(245,166,35,0.3); }
     .section-title .tag.s2 { background: var(--s2-dim); color: var(--s2); border: 1px solid rgba(62,207,207,0.3); }
     .section-title .tag.s3 { background: var(--s3-dim); color: var(--s3); border: 1px solid rgba(224,92,106,0.3); }
-    .section-title h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #fff;
-    }
-    .section-title .hint {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      margin-left: auto;
-    }
+    .section-title h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
+    .section-title .hint { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); margin-left: auto; }
 
-    /* ── TABLE (Student 1) ── */
-    .table-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--border);
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .toolbar input,
-    .toolbar select {
-      background: var(--surface2);
-      border: 1px solid var(--border-bright);
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      padding: 9px 14px;
-      border-radius: var(--radius);
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .toolbar input:focus,
-    .toolbar select:focus { border-color: var(--s1); }
+    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .toolbar { display: flex; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap; }
+    .toolbar input, .toolbar select { background: var(--surface2); border: 1px solid var(--border-bright); color: var(--text); font-family: var(--mono); font-size: 0.82rem; padding: 9px 14px; border-radius: var(--radius); outline: none; transition: border-color 0.15s; }
+    .toolbar input:focus, .toolbar select:focus { border-color: var(--s1); }
     .toolbar input { flex: 1; min-width: 180px; }
-
-    .btn {
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      font-weight: 700;
-      padding: 9px 18px;
-      border-radius: var(--radius);
-      border: 1px solid;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.15s;
-    }
-    .btn-primary {
-      background: var(--s1);
-      color: #000;
-      border-color: var(--s1);
-    }
+    .btn { font-family: var(--mono); font-size: 0.76rem; font-weight: 700; padding: 9px 18px; border-radius: var(--radius); border: 1px solid; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.15s; }
+    .btn-primary { background: var(--s1); color: #000; border-color: var(--s1); }
     .btn-primary:hover { background: #ffb840; }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-mid);
-      border-color: var(--border-bright);
-    }
+    .btn-ghost { background: transparent; color: var(--text-mid); border-color: var(--border-bright); }
     .btn-ghost:hover { border-color: var(--text-mid); color: var(--text); }
 
-    .row-count {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      padding: 5px 12px;
-      border: 1px solid var(--border-bright);
-      border-radius: 20px;
-    }
-
-    .table-scroll {
-      max-height: 480px;
-      overflow: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--mono);
-      font-size: 0.8rem;
-    }
-
-    thead th {
-      position: sticky;
-      top: 0;
-      background: var(--surface2);
-      text-align: left;
-      padding: 12px 16px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      border-bottom: 1px solid var(--border-bright);
-      white-space: nowrap;
-    }
-
-    tbody td {
-      padding: 11px 16px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-    }
-
+    .table-scroll { max-height: 520px; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.78rem; }
+    thead th { position: sticky; top: 0; background: var(--surface2); text-align: left; padding: 12px 14px; font-size: 0.66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border-bright); white-space: nowrap; }
+    tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
     tbody tr:hover { background: rgba(245,166,35,0.04); }
-
     td.numeric { text-align: right; font-variant-numeric: tabular-nums; }
 
-    td.grade-A { color: var(--green); font-weight: 700; }
-    td.grade-B { color: var(--amber); font-weight: 700; }
-    td.grade-C { color: var(--s2); font-weight: 700; }
-    td.grade-D { color: var(--s3); font-weight: 700; }
+    td.size-Mega   { color: var(--s3); font-weight: 700; }
+    td.size-Large  { color: var(--amber); font-weight: 700; }
+    td.size-Medium { color: var(--s2); font-weight: 700; }
+    td.size-Small  { color: var(--green); font-weight: 700; }
 
-    .placeholder-row td {
-      padding: 40px;
-      text-align: center;
-      color: var(--text-dim);
-      font-style: italic;
-    }
+    td.stock-pos { color: var(--green); }
+    td.stock-neg { color: var(--s3); }
+    td.stock-neu { color: var(--text-mid); }
 
-    /* ── STAT CARDS (Student 3) ── */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin-bottom: 22px;
-    }
+    .ai-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; }
+    .ai-pill.yes { background: var(--s3-dim); color: var(--s3); border: 1px solid rgba(224,92,106,0.3); }
+    .ai-pill.no  { color: var(--text-dim); }
 
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 22px;
-      position: relative;
-      overflow: hidden;
-    }
+    .placeholder-row td { padding: 40px; text-align: center; color: var(--text-dim); font-style: italic; }
 
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--s3);
-    }
-
-    .stat-card .label {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 2px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .stat-card .value {
-      font-family: var(--mono);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1;
-    }
-
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; position: relative; overflow: hidden; }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--s3); }
+    .stat-card .label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
+    .stat-card .value { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: #fff; line-height: 1; }
     .stat-card .value.pending { color: var(--text-dim); font-size: 1.2rem; font-style: italic; }
 
-    /* ── CHART GRID (Student 2) ── */
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 18px;
-    }
-
-    .chart-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 22px;
-      min-height: 340px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .chart-card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #fff;
-    }
-
-    .chart-card .chart-sub {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      margin-bottom: 16px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .chart-wrap {
-      position: relative;
-      flex: 1;
-      min-height: 260px;
-    }
-
+    .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; }
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; min-height: 360px; display: flex; flex-direction: column; }
+    .chart-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
+    .chart-card .chart-sub { font-family: var(--mono); font-size: 0.68rem; color: var(--text-dim); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+    .chart-wrap { position: relative; flex: 1; min-height: 280px; }
     canvas { max-width: 100%; }
-
-    .chart-placeholder {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-      color: var(--text-dim);
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      border: 1px dashed var(--border-bright);
-      border-radius: var(--radius);
-      background: var(--surface2);
-      text-align: center;
-      padding: 20px;
-    }
-
+    .chart-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; color: var(--text-dim); font-family: var(--mono); font-size: 0.78rem; border: 1px dashed var(--border-bright); border-radius: var(--radius); background: var(--surface2); text-align: center; padding: 20px; }
     .chart-placeholder .emoji { font-size: 1.6rem; opacity: 0.5; }
 
-    /* ── REGRESSION PANEL (Student 3) ── */
-    .regression {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 26px;
-      margin-top: 22px;
-    }
+    .regression { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; margin-top: 22px; }
+    .reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .reg-item .label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; }
+    .reg-item .value { font-family: var(--mono); font-size: 1.2rem; font-weight: 700; color: var(--s3); }
+    .reg-equation { background: var(--surface2); border: 1px solid var(--border-bright); border-radius: var(--radius); padding: 14px 18px; font-family: var(--mono); font-size: 0.9rem; color: var(--s3); text-align: center; margin-bottom: 12px; }
+    .reg-interp { font-family: var(--mono); font-size: 0.78rem; color: var(--text-mid); text-align: center; padding: 10px; letter-spacing: 1px; }
 
-    .reg-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+    .desc-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 22px; }
+    .desc-item { background: var(--surface); padding: 16px; text-align: center; }
+    .desc-item .label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .desc-item .value { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; color: var(--text); }
 
-    .reg-item .label {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 2px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .reg-item .value {
-      font-family: var(--mono);
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--s3);
-    }
-
-    .reg-equation {
-      background: var(--surface2);
-      border: 1px solid var(--border-bright);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      font-family: var(--mono);
-      font-size: 0.95rem;
-      color: var(--s3);
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .reg-interp {
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      color: var(--text-mid);
-      text-align: center;
-      padding: 10px;
-      letter-spacing: 1px;
-    }
-
-    /* ── DESCRIPTIVE STATS STRIP ── */
-    .desc-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: 22px;
-    }
-
-    .desc-item {
-      background: var(--surface);
-      padding: 16px;
-      text-align: center;
-    }
-
-    .desc-item .label {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 6px;
-    }
-
-    .desc-item .value {
-      font-family: var(--mono);
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 30px;
-      border-top: 1px solid var(--border);
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      letter-spacing: 2px;
-    }
+    footer { position: relative; z-index: 1; text-align: center; padding: 30px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim); letter-spacing: 2px; }
 
     @media (max-width: 700px) {
       header { padding: 32px 20px 24px; }
@@ -505,8 +134,8 @@
 
 <header>
   <span class="eyebrow">Computer Science Dept · Collaborative Git Project</span>
-  <h1>DataSci Collab</h1>
-  <p class="subtitle">Student performance dashboard built by three collaborators using Git branches, pull requests, and code review.</p>
+  <h1>Tech Layoffs 2026</h1>
+  <p class="subtitle">28 companies · Q1 2026 · Layoffs announced, AI investment cited, stock market reaction tracked.</p>
   <div class="badges">
     <span class="badge s1"><span class="dot"></span>S1 · Dataset &amp; Table</span>
     <span class="badge s2"><span class="dot"></span>S2 · Visualization</span>
@@ -516,27 +145,25 @@
 
 <main>
 
-  <!-- ═══════════════════════════════════════════════
-       SECTION 1 · INTERACTIVE TABLE  (Student 1)
-  ═══════════════════════════════════════════════ -->
+  <!-- SECTION 1 · TABLE (Student 1) -->
   <div class="section-title">
     <span class="tag s1">S1</span>
-    <h2>Dataset Table</h2>
+    <h2>Layoffs Dataset</h2>
     <span class="hint" id="rowCount">— rows</span>
   </div>
 
   <div class="table-card">
     <div class="toolbar">
-      <input type="text" id="filterInput" placeholder="Filter by name…" />
+      <input type="text" id="filterInput" placeholder="Filter by company, sector, or country…" />
       <select id="sortSelect">
         <option value="">Sort by…</option>
-        <option value="name">Name (A–Z)</option>
-        <option value="studyHours">Study Hours (high → low)</option>
-        <option value="attendance">Attendance (high → low)</option>
-        <option value="midterm">Midterm (high → low)</option>
-        <option value="score">Final Score (high → low)</option>
-        <option value="assignments">Assignments (high → low)</option>
-        <option value="sleep">Sleep (high → low)</option>
+        <option value="company">Company (A–Z)</option>
+        <option value="layoffDate">Layoff Date (newest first)</option>
+        <option value="jobsCut">Jobs Cut (high → low)</option>
+        <option value="pctWorkforceCut">% Workforce (high → low)</option>
+        <option value="stockChangePct">Stock Change (high → low)</option>
+        <option value="aiInvestBn">AI Investment $B (high → low)</option>
+        <option value="revenueBn">Revenue $B (high → low)</option>
       </select>
       <button class="btn btn-primary" onclick="applyFilterSort()">Apply</button>
       <button class="btn btn-ghost" onclick="resetTable()">Reset</button>
@@ -547,20 +174,21 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Study Hrs</th>
-            <th>Attendance</th>
-            <th>Midterm</th>
-            <th>Final Score</th>
-            <th>Assignments</th>
-            <th>Sleep</th>
-            <th>Part-time Job</th>
-            <th>Grade</th>
+            <th>Company</th>
+            <th>Date</th>
+            <th>Jobs Cut</th>
+            <th>% Workforce</th>
+            <th>Sector</th>
+            <th>Region</th>
+            <th>AI Cited</th>
+            <th>Stock %</th>
+            <th>AI Invest $B</th>
+            <th>Size</th>
           </tr>
         </thead>
         <tbody id="tableBody">
           <tr class="placeholder-row">
-            <td colspan="10">Waiting for loadDataset() …</td>
+            <td colspan="11">Waiting for loadDataset() …</td>
           </tr>
         </tbody>
       </table>
@@ -568,23 +196,20 @@
   </div>
 
 
-  <!-- ═══════════════════════════════════════════════
-       SECTION 2 · STATISTICS ENGINE  (Student 3)
-  ═══════════════════════════════════════════════ -->
+  <!-- SECTION 2 · STATS (Student 3) -->
   <div class="section-title">
     <span class="tag s3">S3</span>
     <h2>Statistical Analysis</h2>
-    <span class="hint">Computed from Final Score</span>
+    <span class="hint">Computed from Jobs Cut</span>
   </div>
 
-  <!-- Summary stat cards -->
   <div class="stat-grid">
     <div class="stat-card">
-      <div class="label">Mean</div>
+      <div class="label">Mean Jobs Cut</div>
       <div class="value pending" id="statMean">—</div>
     </div>
     <div class="stat-card">
-      <div class="label">Median</div>
+      <div class="label">Median Jobs Cut</div>
       <div class="value pending" id="statMedian">—</div>
     </div>
     <div class="stat-card">
@@ -592,40 +217,38 @@
       <div class="value pending" id="statStdDev">—</div>
     </div>
     <div class="stat-card">
-      <div class="label">Mode</div>
+      <div class="label">Most Affected Sector</div>
       <div class="value pending" id="statMode">—</div>
     </div>
   </div>
 
-  <!-- Descriptive strip -->
   <div class="desc-strip">
-    <div class="desc-item"><div class="label">Count</div><div class="value" id="dCount">—</div></div>
-    <div class="desc-item"><div class="label">Min</div><div class="value" id="dMin">—</div></div>
-    <div class="desc-item"><div class="label">Max</div><div class="value" id="dMax">—</div></div>
+    <div class="desc-item"><div class="label">Companies</div><div class="value" id="dCount">—</div></div>
+    <div class="desc-item"><div class="label">Min Cut</div><div class="value" id="dMin">—</div></div>
+    <div class="desc-item"><div class="label">Max Cut</div><div class="value" id="dMax">—</div></div>
     <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">—</div></div>
     <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">—</div></div>
     <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">—</div></div>
+    <div class="desc-item"><div class="label">Total Jobs</div><div class="value" id="dTotalJobs">—</div></div>
+    <div class="desc-item"><div class="label">AI Cited %</div><div class="value" id="dAiCitedPct">—</div></div>
   </div>
 
-  <!-- Regression panel -->
   <div class="regression">
     <div class="section-title" style="margin: 0 0 16px;">
       <span class="tag s3">REG</span>
-      <h2 style="font-size:1.05rem;">Linear Regression · Study Hours → Final Score</h2>
+      <h2 style="font-size:1.05rem;">Linear Regression · AI Investment ($B) → Jobs Cut</h2>
     </div>
     <div class="reg-grid">
       <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">—</div></div>
       <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">—</div></div>
       <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">—</div></div>
     </div>
-    <div class="reg-equation" id="rEquation">score = m·hours + b</div>
+    <div class="reg-equation" id="rEquation">jobsCut = m · aiInvestBn + b</div>
     <div class="reg-interp" id="rInterp">— correlation —</div>
   </div>
 
 
-  <!-- ═══════════════════════════════════════════════
-       SECTION 3 · DATA VISUALIZATION  (Student 2)
-  ═══════════════════════════════════════════════ -->
+  <!-- SECTION 3 · CHARTS (Student 2) -->
   <div class="section-title">
     <span class="tag s2">S2</span>
     <h2>Visualizations</h2>
@@ -634,8 +257,8 @@
 
   <div class="chart-grid">
     <div class="chart-card">
-      <h3>Study Hours vs Final Score</h3>
-      <div class="chart-sub">Bar · sorted by study hours</div>
+      <h3>Top 10 Companies by Jobs Cut</h3>
+      <div class="chart-sub">Bar · sorted descending</div>
       <div class="chart-wrap">
         <div class="chart-placeholder" id="barChartPlaceholder">
           <span class="emoji">📊</span>
@@ -646,8 +269,8 @@
     </div>
 
     <div class="chart-card">
-      <h3>Attendance vs Final Score</h3>
-      <div class="chart-sub">Scatter · one dot per student</div>
+      <h3>AI Investment vs Jobs Cut</h3>
+      <div class="chart-sub">Scatter · one dot per company</div>
       <div class="chart-wrap">
         <div class="chart-placeholder" id="scatterChartPlaceholder">
           <span class="emoji">🎯</span>
@@ -658,8 +281,8 @@
     </div>
 
     <div class="chart-card">
-      <h3>Final Score Distribution</h3>
-      <div class="chart-sub">Histogram · 10-point bins</div>
+      <h3>% Workforce Cut Distribution</h3>
+      <div class="chart-sub">Histogram · severity bins</div>
       <div class="chart-wrap">
         <div class="chart-placeholder" id="histChartPlaceholder">
           <span class="emoji">📈</span>
@@ -670,8 +293,8 @@
     </div>
 
     <div class="chart-card">
-      <h3>Grade Breakdown</h3>
-      <div class="chart-sub">Doughnut · A / B / C / D</div>
+      <h3>Layoffs by Region</h3>
+      <div class="chart-sub">Doughnut · North America / Europe / Asia-Pacific</div>
       <div class="chart-wrap">
         <div class="chart-placeholder" id="pieChartPlaceholder">
           <span class="emoji">🍩</span>
@@ -685,13 +308,13 @@
 </main>
 
 <footer>
-  DATASCI COLLAB · BUILT WITH GIT · S1 · S2 · S3
+  TECH LAYOFFS 2026 · DATASCI COLLAB · S1 · S2 · S3
 </footer>
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
      JAVASCRIPT — SHARED CONTRACT BELOW
-     ═══════════════════════════════════════════════════════════════════════════
+     ════════════════════════════════════════
      This file is edited by three students. Each student works ONLY within their
      clearly labeled TODO block. Do not rename, move, or delete HTML element IDs.
      Do not mutate RAW_DATA. Do not commit directly to main.
