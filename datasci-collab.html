@@ -537,6 +537,7 @@ function applyFilterSort() {
   }
  
   renderTable(result);
+  renderStats(result);
   document.getElementById('rowCount').textContent = result.length + ' rows';
 }
  
@@ -546,6 +547,7 @@ function resetTable() {
   document.getElementById('filterInput').value = '';
   document.getElementById('sortSelect').value  = '';
   renderTable(window.DS);
+  renderStats(window.DS);
   document.getElementById('rowCount').textContent = window.DS.length + ' rows';
 }
  
