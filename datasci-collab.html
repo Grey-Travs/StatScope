@@ -205,7 +205,7 @@
   </style>
 </head>
 <body>
- 
+
 <header>
   <span class="eyebrow">Computer Science Dept · Collaborative Git Project</span>
   <h1>Tech Layoffs 2026</h1>
@@ -216,16 +216,16 @@
     <span class="badge s3"><span class="dot"></span>S3 · Statistics</span>
   </div>
 </header>
- 
+
 <main>
- 
+
   <!-- SECTION 1 · TABLE (Student 1) -->
   <div class="section-title">
     <span class="tag s1">S1</span>
     <h2>Layoffs Dataset</h2>
     <span class="hint" id="rowCount">— rows</span>
   </div>
- 
+
   <div class="table-card">
     <div class="toolbar">
       <input type="text" id="filterInput" placeholder="Filter by company, sector, or country…" />
@@ -242,7 +242,7 @@
       <button class="btn btn-primary" onclick="applyFilterSort()">Apply</button>
       <button class="btn btn-ghost" onclick="resetTable()">Reset</button>
     </div>
- 
+
     <div class="table-scroll">
       <table>
         <thead>
@@ -268,72 +268,67 @@
       </table>
     </div>
   </div>
- 
- 
-  <!-- ═══════════════════════════════════════════════
-       SECTION 2 · STATISTICS ENGINE  (Student 3)
-  ═══════════════════════════════════════════════ -->
-  
-<div class="section-title">
-  <span class="tag s3">S3</span>
-  <h2>Statistical Analysis</h2>
-  <span class="hint">Computed from AI Investment ($B)</span>
-</div>
- 
-<!-- Summary stat cards -->
-<div class="stat-grid">
-  <div class="stat-card">
-    <div class="label">Mean</div>
-    <div class="value" id="statMean">58.78</div>
+
+
+  <!-- SECTION 2 · STATS (Student 3) -->
+  <div class="section-title">
+    <span class="tag s3">S3</span>
+    <h2>Statistical Analysis</h2>
+    <span class="hint">Computed from Jobs Cut</span>
   </div>
-  <div class="stat-card">
-    <div class="label">Median</div>
-    <div class="value" id="statMedian">57.50</div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="label">Mean Jobs Cut</div>
+      <div class="value pending" id="statMean">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Median Jobs Cut</div>
+      <div class="value pending" id="statMedian">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Std. Dev.</div>
+      <div class="value pending" id="statStdDev">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Most Affected Sector</div>
+      <div class="value pending" id="statMode">—</div>
+    </div>
   </div>
-  <div class="stat-card">
-    <div class="label">Std. Dev.</div>
-    <div class="value" id="statStdDev">23.72</div>
+
+  <div class="desc-strip">
+    <div class="desc-item"><div class="label">Companies</div><div class="value" id="dCount">—</div></div>
+    <div class="desc-item"><div class="label">Min Cut</div><div class="value" id="dMin">—</div></div>
+    <div class="desc-item"><div class="label">Max Cut</div><div class="value" id="dMax">—</div></div>
+    <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">—</div></div>
+    <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">—</div></div>
+    <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">—</div></div>
+    <div class="desc-item"><div class="label">Total Jobs</div><div class="value" id="dTotalJobs">—</div></div>
+    <div class="desc-item"><div class="label">AI Cited %</div><div class="value" id="dAiCitedPct">—</div></div>
   </div>
-  <div class="stat-card">
-    <div class="label">Mode</div>
-    <div class="value" id="statMode">None</div>
+
+  <div class="regression">
+    <div class="section-title" style="margin: 0 0 16px;">
+      <span class="tag s3">REG</span>
+      <h2 style="font-size:1.05rem;">Linear Regression · AI Investment ($B) → Jobs Cut</h2>
+    </div>
+    <div class="reg-grid">
+      <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">—</div></div>
+      <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">—</div></div>
+      <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">—</div></div>
+    </div>
+    <div class="reg-equation" id="rEquation">jobsCut = m · aiInvestBn + b</div>
+    <div class="reg-interp" id="rInterp">— correlation —</div>
   </div>
-</div>
- 
-<!-- Descriptive strip -->
-<div class="desc-strip">
-  <div class="desc-item"><div class="label">Count</div><div class="value" id="dCount">20</div></div>
-  <div class="desc-item"><div class="label">Min</div><div class="value" id="dMin">22</div></div>
-  <div class="desc-item"><div class="label">Max</div><div class="value" id="dMax">110</div></div>
-  <div class="desc-item"><div class="label">Range</div><div class="value" id="dRange">88</div></div>
-  <div class="desc-item"><div class="label">Variance</div><div class="value" id="dVariance">562.38</div></div>
-  <div class="desc-item"><div class="label">Std Dev</div><div class="value" id="dStdDev">23.72</div></div>
-</div>
- 
-<!-- Regression panel -->
-<div class="regression">
-  <div class="section-title" style="margin: 0 0 16px;">
-    <span class="tag s3">REG</span>
-    <h2 style="font-size:1.05rem;">Linear Regression · AI Investment ($B) → Jobs Cut</h2>
-  </div>
-  <div class="reg-grid">
-    <div class="reg-item"><div class="label">Slope (m)</div><div class="value" id="rSlope">105.104</div></div>
-    <div class="reg-item"><div class="label">Intercept (b)</div><div class="value" id="rIntercept">2135.653</div></div>
-    <div class="reg-item"><div class="label">R²</div><div class="value" id="rSquared">0.3113</div></div>
-  </div>
-  <div class="reg-equation" id="rEquation">jobsCut = 105.1037 · aiInvestBn + 2135.6532</div>
-  <div class="reg-interp" id="rInterp">
-    Moderate Positive Correlation (r = 0.5579)
-  </div>
-</div>
- 
+
+
   <!-- SECTION 3 · CHARTS (Student 2) -->
   <div class="section-title">
     <span class="tag s2">S2</span>
     <h2>Visualizations</h2>
     <span class="hint">Chart.js v4</span>
   </div>
- 
+
   <div class="chart-grid">
     <div class="chart-card">
       <h3>Top 10 Companies by Jobs Cut</h3>
@@ -346,7 +341,7 @@
         <canvas id="barChart" style="display:none;"></canvas>
       </div>
     </div>
- 
+
     <div class="chart-card">
       <h3>AI Investment vs Jobs Cut</h3>
       <div class="chart-sub">Scatter · one dot per company</div>
@@ -358,7 +353,7 @@
         <canvas id="scatterChart" style="display:none;"></canvas>
       </div>
     </div>
- 
+
     <div class="chart-card">
       <h3>% Workforce Cut Distribution</h3>
       <div class="chart-sub">Histogram · severity bins</div>
@@ -370,7 +365,7 @@
         <canvas id="histChart" style="display:none;"></canvas>
       </div>
     </div>
- 
+
     <div class="chart-card">
       <h3>Layoffs by Region</h3>
       <div class="chart-sub">Doughnut · North America / Europe / Asia-Pacific</div>
@@ -383,9 +378,9 @@
       </div>
     </div>
   </div>
- 
+
 </main>
- 
+
 <footer>
   TECH LAYOFFS 2026 · DATASCI COLLAB · S1 · S2 · S3
 </footer>
@@ -748,7 +743,116 @@ function drawPieChart(canvasId, data) {
     }
   });
 }
- 
+
+// TASK 1 — mean
+function mean(arr) {
+  const sum = arr.reduce((acc, v) => acc + v, 0);
+  return parseFloat((sum / arr.length).toFixed(2));
+}
+
+// TASK 2 — median
+function median(arr) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const n = sorted.length;
+  if (n % 2 !== 0) return parseFloat(sorted[Math.floor(n / 2)].toFixed(2));
+  return parseFloat(((sorted[n / 2 - 1] + sorted[n / 2]) / 2).toFixed(2));
+}
+
+// TASK 3 — mode (most-frequent value; for strings, returns tied values joined by " & ")
+function mode(arr) {
+  const freq = arr.reduce((m, v) => { m[v] = (m[v] || 0) + 1; return m; }, {});
+  const maxCount = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k => freq[k] === maxCount);
+  return modes.join(' & ');
+}
+
+// TASK 4 — population variance
+function variance(arr) {
+  const mu = mean(arr);
+  const sumSq = arr.reduce((acc, v) => acc + (v - mu) ** 2, 0);
+  return parseFloat((sumSq / arr.length).toFixed(2));
+}
+
+// TASK 5 — standard deviation
+function stdDev(arr) {
+  return parseFloat(Math.sqrt(variance(arr)).toFixed(2));
+}
+
+// TASK 6 — Pearson correlation
+function pearsonCorr(x, y) {
+  const mx = mean(x), my = mean(y);
+  const num = x.reduce((s, xi, i) => s + (xi - mx) * (y[i] - my), 0);
+  const sx2 = x.reduce((s, xi) => s + (xi - mx) ** 2, 0);
+  const sy2 = y.reduce((s, yi) => s + (yi - my) ** 2, 0);
+  const den = Math.sqrt(sx2 * sy2);
+  if (den === 0) return 0;
+  return parseFloat((num / den).toFixed(4));
+}
+
+// TASK 7 — linear regression { slope, intercept, rSquared }
+function linearRegression(x, y) {
+  const mx = mean(x), my = mean(y);
+  const num = x.reduce((s, xi, i) => s + (xi - mx) * (y[i] - my), 0);
+  const den = x.reduce((s, xi) => s + (xi - mx) ** 2, 0);
+  const slope = num / den;
+  const intercept = my - slope * mx;
+  const r2 = pearsonCorr(x, y) ** 2;
+  return {
+    slope:     parseFloat(slope.toFixed(4)),
+    intercept: parseFloat(intercept.toFixed(4)),
+    rSquared:  parseFloat(r2.toFixed(4))
+  };
+}
+
+// TASK 8 — renderStats : wires all math into the DOM
+function renderStats(data) {
+  const jobs    = data.map(d => d.jobsCut);
+  const invest  = data.map(d => d.aiInvestBn);
+  const sectors = data.map(d => d.sector);
+
+  try {
+    // Summary cards
+    document.getElementById('statMean').textContent   = mean(jobs).toLocaleString();
+    document.getElementById('statMedian').textContent = median(jobs).toLocaleString();
+    document.getElementById('statStdDev').textContent = stdDev(jobs).toLocaleString();
+    document.getElementById('statMode').textContent   = mode(sectors);
+
+    // Descriptive strip
+    const minV = Math.min(...jobs);
+    const maxV = Math.max(...jobs);
+    const total = jobs.reduce((s, v) => s + v, 0);
+    const aiCitedCount = data.filter(d => d.aiCited).length;
+
+    document.getElementById('dCount').textContent    = jobs.length;
+    document.getElementById('dMin').textContent      = minV.toLocaleString();
+    document.getElementById('dMax').textContent      = maxV.toLocaleString();
+    document.getElementById('dRange').textContent    = (maxV - minV).toLocaleString();
+    document.getElementById('dVariance').textContent = variance(jobs).toLocaleString();
+    document.getElementById('dStdDev').textContent   = stdDev(jobs).toLocaleString();
+    document.getElementById('dTotalJobs').textContent = total.toLocaleString();
+    document.getElementById('dAiCitedPct').textContent =
+      ((aiCitedCount / data.length) * 100).toFixed(1) + '%';
+
+    // Regression: AI investment (x) → jobs cut (y)
+    const reg = linearRegression(invest, jobs);
+    document.getElementById('rSlope').textContent     = reg.slope.toLocaleString();
+    document.getElementById('rIntercept').textContent = reg.intercept.toLocaleString();
+    document.getElementById('rSquared').textContent   = reg.rSquared;
+
+    document.getElementById('rEquation').textContent =
+      `jobsCut = ${reg.slope} · aiInvestBn + ${reg.intercept}`;
+
+    // Interpretation
+    const r = pearsonCorr(invest, jobs);
+    const strength  = Math.abs(r) >= 0.7 ? 'Strong' : Math.abs(r) >= 0.4 ? 'Moderate' : 'Weak';
+    const direction = r > 0 ? 'Positive' : r < 0 ? 'Negative' : 'No';
+    document.getElementById('rInterp').textContent =
+      `${strength} ${direction} Correlation (r = ${r})`;
+  } catch (e) {
+    console.error('renderStats error:', e);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', loadDataset);
 </script>
 </body>
